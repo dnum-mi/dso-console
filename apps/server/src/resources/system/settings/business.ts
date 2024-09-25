@@ -1,9 +1,13 @@
-import type { UpsertSystemSettingBody } from '@cpn-console/shared'
-import {
-  getSystemSettings as getSystemSettingsQuery,
-  upsertSystemSetting as upsertSystemSettingQuery,
-} from './queries.js'
+import type { UpsertSystemSettingsBody } from '@cpn-console/shared'
+import { upsertSystemSetting as upsertSystemSettingQuery } from './queries.js'
+import { getConfig } from '@/utils/config.js'
 
-export const getSystemSettings = (key?: string) => getSystemSettingsQuery({ key })
+export const getSystemSettings = async () => getConfig()
 
-export const upsertSystemSetting = (newSystemSetting: UpsertSystemSettingBody) => upsertSystemSettingQuery(newSystemSetting)
+export async function upsertSystemSettings(newSystemSettings: UpsertSystemSettingsBody) {
+  if (!newSystemSettings) return getSystemSettings()
+  for (const [key, value] of Object.entries(newSystemSettings)) {
+    await upsertSystemSettingQuery({ key, value })
+  }
+  return await getSystemSettings()
+}
