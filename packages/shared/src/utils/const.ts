@@ -135,3 +135,11 @@ export const statusDict = {
     },
   },
 } as const
+
+export const servicePluginOrder = [
+  'argocd',
+  'gitlab',
+  'registry',
+  'sonarqube',
+  'vault',
+]
